@@ -1,0 +1,80 @@
+---
+- name: Install iptables packages
+  ansible.builtin.apt:
+    update_cache: true
+    name: "{{ iptables_packages }}"
+
+- name: Allow loopback traffic
+  ansible.builtin.iptables:
+    chain: INPUT
+    in_interface: lo
+    jump: ACCEPT
+
+- name: Allow related and established connections
+  ansible.builtin.iptables:
+    chain: INPUT
+    match: state
+    ctstate: RELATED,ESTABLISHED
+    jump: ACCEPT
+
+- name: Allow SSH traffic
+  ansible.builtin.iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: 22
+    jump: ACCEPT
+
+- name: Allow HTTP traffic from specific IP to http port
+  ansible.builtin.iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: 80
+    source: "{{ loadbalancer_ip | mandatory }}"
+    jump: ACCEPT
+
+- name: Allow HTTP traffic from specific IP to https port
+  when: enable_tls
+  ansible.builtin.iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: 443
+    source: "{{ loadbalancer_ip | mandatory }}"
+    jump: ACCEPT
+
+- name: Allow healthcheck port traffic from specific IP
+  ansible.builtin.iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: 3080
+    source: "{{ loadbalancer_ip | mandatory }}"
+    jump: ACCEPT
+
+- name: Set default policy to DROP
+  ansible.builtin.iptables:
+    chain: INPUT
+    policy: DROP
+
+- name: Save ipv4 current state of the firewall in system file
+  community.general.iptables_state:
+    ip_version: ipv4
+    state: saved
+    path: /etc/iptables/rules.v4
+
+- name: Save ipv6 current state of the firewall in system file
+  community.general.iptables_state:
+    ip_version: ipv6
+    state: saved
+    path: /etc/iptables/rules.v6
+
+- name: Disable SSH password authentication
+  when: disable_ssh_password_auth
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#PasswordAuthentication yes'
+    line: 'PasswordAuthentication no'
+
+- name: Restart ssh
+  when: disable_ssh_password_auth
+  ansible.builtin.service:
+    name: ssh
+    state: restarted

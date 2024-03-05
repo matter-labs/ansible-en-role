@@ -1,0 +1,50 @@
+version: "3.9"
+services:
+  vmagent:
+    container_name: vmagent
+    image: "victoriametrics/vmagent:v{{ vmagent_version }}"
+    volumes:
+      - vmagentdata:/vmagentdata
+      - ./vmagent-config.yml:/etc/vmagent/config.yml
+    command:
+{% if prometheus_remote_write %}
+      - "--remoteWrite.url={{ prometheus_remote_write_url }}"
+      - "--remoteWrite.label={{ prometheus_remote_write_label }}"
+{% if prometheus_remote_write_auth %}
+      - "--remoteWrite.basicAuth.username={{ prometheus_remote_write_auth_username }}"
+      - "--remoteWrite.basicAuth.password={{ prometheus_remote_write_auth_password }}"
+      - "--remoteWrite.tmpDataPath=/tmp/vmagent"
+{% endif %}
+{% endif %}
+      - "--promscrape.config=/etc/vmagent/config.yml"
+      - "--promscrape.streamParse=true"
+      - "--remoteWrite.vmProtoCompressLevel=2"
+    restart: always
+
+  node-exporter:
+    image: "prom/node-exporter:v{{ node_exporter_version }}"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    restart: unless-stopped
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+
+  cadvisor:
+    image: "gcr.io/cadvisor/cadvisor:v{{ cadvisor_version }}"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+
+  postgres-exporter:
+    image: "quay.io/prometheuscommunity/postgres-exporter:v{{ postgres_exporter_version }}"
+    env_file:
+      - postgres.env
+
+volumes:
+  vmagentdata:
