@@ -1,0 +1,7 @@
+---
+- name: Setup firewall
+  ansible.builtin.include_tasks: firewall.yml
+  when: use_predefined_iptables
+
+- name: Prepare configs
+  ansible.builtin.include_tasks: provision.yml

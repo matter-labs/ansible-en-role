@@ -1,0 +1,40 @@
+scrape_configs:
+  - job_name: external-node
+    static_configs:
+      - targets: ['external_node:{{ metrics_port }}']
+    relabel_configs:
+      - source_labels: [instance]
+        target_label: instance
+        replacement: '{{ node_name | mandatory }}'
+  - job_name: vmagent
+    static_configs:
+      - targets:
+          - "127.0.0.1:8429"
+    relabel_configs:
+      - source_labels: [instance]
+        target_label: instance
+        replacement: '{{ node_name | mandatory }}'
+  - job_name: node-exporter
+    static_configs:
+      - targets:
+          - "node-exporter:9100"
+    relabel_configs:
+      - source_labels: [instance]
+        target_label: instance
+        replacement: '{{ node_name | mandatory }}'
+  - job_name: cadvisor
+    static_configs:
+      - targets:
+          - "cadvisor:8080"
+    relabel_configs:
+      - source_labels: [instance]
+        target_label: instance
+        replacement: '{{ node_name | mandatory }}'
+  - job_name: postgres-exporter
+    static_configs:
+      - targets:
+          - "postgres-exporter:9187"
+    relabel_configs:
+      - source_labels: [instance]
+        target_label: instance
+        replacement: '{{ node_name | mandatory }}'

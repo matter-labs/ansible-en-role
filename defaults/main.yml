@@ -1,0 +1,109 @@
+---
+# Places for store configurations and databases
+configuration_directory: "/opt/en"
+storage_directory: "/usr/src/en"
+
+# Install docker-compose
+docker_install_compose: true
+docker_version: "25.0.3"
+docker_compose_version: "v2.23.0"
+
+# Versions of external node and 3rd party components
+traefik_version: 2.11
+postgres_version: 14
+external_node_version: 21.0.2
+vmagent_version: 1.95.1
+node_exporter_version: 1.7.0
+cadvisor_version: 0.47.2
+postgres_exporter_version: 0.15.0
+
+# Postgres configuration
+postgres_arguments:
+  - log_error_verbosity=terse
+  - -c
+  - max_connections=256
+  - -c
+  - shared_buffers=47616MB
+  - -c
+  - effective_cache_size=142848MB
+  - -c
+  - maintenance_work_mem=2GB
+  - -c
+  - checkpoint_completion_target=0.9
+  - -c
+  - wal_buffers=16MB
+  - -c
+  - default_statistics_target=500
+  - -c
+  - random_page_cost=1.1
+  - -c
+  - effective_io_concurrency=200
+  - -c
+  - work_mem=2573kB
+  - -c
+  - huge_pages=try
+  - -c
+  - min_wal_size=4GB
+  - -c
+  - max_wal_size=16GB
+  - -c
+  - max_worker_processes=74
+  - -c
+  - max_parallel_workers_per_gather=37
+  - -c
+  - max_parallel_workers=74
+  - -c
+  - max_parallel_maintenance_workers=4
+  - -c
+  - checkpoint_timeout=1800
+
+
+# Enable TLS for traefik
+enable_tls: false
+acme_email: ""
+domain_name: ""
+
+# Force restore pg database
+force_pg_restore: false
+
+# External node and database options
+database_name: ""
+database_username: ""
+database_password: ""
+eth_l1_url: ""
+main_node_url: ""
+l1_chain_id: ""
+l2_chain_id: ""
+rpc_http_port: 3060
+rpc_ws_port: 3061
+healthcheck_port: 3081
+metrics_port: 3082
+
+# Monitoring options section
+enable_monitoring: false
+node_name: ""
+prometheus_remote_write: false
+prometheus_remote_write_url: ""
+prometheus_remote_write_auth: false
+prometheus_remote_write_auth_username: ""
+prometheus_remote_write_auth_password: ""
+prometheus_remote_write_label: ""
+
+# Security options
+use_predefined_iptables: false
+disable_ssh_password_auth: false
+iptables_packages:
+  - iptables
+  - iptables-persistent
+# Variable can be used in case with accept external traffic only from one ip
+loadbalancer_ip: ""
+
+# For internal usage
+en_required_variables:
+  - eth_l1_url
+  - main_node_url
+  - l1_chain_id
+  - l2_chain_id
+
+monitoring_required_variables:
+  - node_name

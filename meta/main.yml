@@ -1,0 +1,18 @@
+---
+dependencies:
+  - src: geerlingguy.docker
+    version: "7.1.0"
+    when: docker_install
+
+galaxy_info:
+  role_name: external_node
+  author: matter-labs
+  description: External node setup
+  license: "license (MIT, APACHE)"
+  min_ansible_version: "2.13.9"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - jammy
+  galaxy_tags:
+    - en

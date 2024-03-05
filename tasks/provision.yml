@@ -1,0 +1,98 @@
+---
+- name: Create configuration directory
+  ansible.builtin.file:
+    path: "{{ configuration_directory }}"
+    state: directory
+    mode: '0755'
+
+- name: Create storage directories
+  ansible.builtin.file:
+    path: "{{ storage_directory }}/{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - db
+    - db/lightweight-new
+    - db/state_keeper
+
+- name: "Verify that required variables are defined"
+  ansible.builtin.assert:
+    that:
+      - required_var != ""
+    fail_msg: "{{ required_var }} needs to be set for the role to work"
+    success_msg: "Required variable {{ required_var }} isn't empty"
+  loop_control:
+    loop_var: required_var
+  with_items:
+    - database_name
+    - database_username
+    - database_password
+    - eth_l1_url
+    - main_node_url
+    - l2_chain_id
+    - l1_chain_id
+
+- name: Check required en vars empty
+  ansible.builtin.fail:
+    msg: "Variable '{{ item }}' is empty"
+  when: vars[item] == ""
+  with_items: "{{ en_required_variables }}"
+
+- name: Copy main configs
+  ansible.builtin.template:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+    mode: '0644'
+  loop:
+    - src: "templates/docker-compose.yaml.j2"
+      dest: "{{ configuration_directory }}/docker-compose.yaml"
+    - src: "templates/external_node.env.j2"
+      dest: "{{ configuration_directory }}/external_node.env"
+    - src: "templates/postgres.env.j2"
+      dest: "{{ configuration_directory }}/postgres.env"
+
+- name: Copy restore script
+  register: restore_dump_script
+  ansible.builtin.template:
+    src: 'templates/restore_dump.sh.j2'
+    dest: '{{ configuration_directory }}/restore_dump.sh'
+    mode: "a+x"
+
+- name: Check required monitoring vars empty
+  ansible.builtin.fail:
+    msg: "Variable '{{ item }}' is empty"
+  when: enable_monitoring and ( vars[item] == "" )
+  with_items: "{{ monitoring_required_variables }}"
+
+- name: Copy monitoring configs
+  when: enable_monitoring
+  ansible.builtin.template:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+    mode: '0644'
+  loop:
+    - src: "templates/monitoring.yaml.j2"
+      dest: "{{ configuration_directory }}/monitoring.yaml"
+    - src: "templates/vmagent-config.yml.j2"
+      dest: "{{ configuration_directory }}/vmagent-config.yml"
+
+- name: Run docker-compose without monitoring
+  when: not enable_monitoring
+  ansible.builtin.shell:
+    cmd: nohup docker compose -f docker-compose.yaml up -d &
+    chdir: "{{ configuration_directory }}"
+  changed_when: false
+
+- name: Run docker-compose with monitoring
+  when: enable_monitoring and (not restore_dump_script.changed)
+  ansible.builtin.shell:
+    cmd: nohup docker compose -f monitoring.yaml -f docker-compose.yaml up -d &
+    chdir: "{{ configuration_directory }}"
+  changed_when: false
+
+- name: Run docker-compose with monitoring with recreation
+  when: enable_monitoring and restore_dump_script.changed
+  ansible.builtin.shell:
+    cmd: nohup docker compose -f monitoring.yaml -f docker-compose.yaml up -d --force-recreate &
+    chdir: "{{ configuration_directory }}"
+  changed_when: false

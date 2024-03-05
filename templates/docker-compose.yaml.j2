@@ -1,0 +1,97 @@
+version: "3.9"
+services:
+  traefik:
+    image: "traefik:{{ traefik_version }}"
+    network_mode: "host"
+    restart: unless-stopped
+    command:
+      - "--log.level=INFO"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.external_node_health.address=:3080"
+{% if enable_tls %}
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.en_resolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.en_resolver.acme.storage=/letsencrypt/acme.json"
+      - "--certificatesresolvers.myresolver.acme.email={{ acme_email }}"
+{% endif %}
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+{% if enable_tls %}
+      - "./letsencrypt:/letsencrypt"
+{% endif %}
+
+  postgres:
+    image: "postgres:{{ postgres_version }}"
+    restart: unless-stopped
+    healthcheck:
+      interval: 1m
+      timeout: 30s
+      retries: 288000
+      start_period: 4h
+      test: psql -U postgres -c "select exists (select * from pg_stat_activity where datname = '{{ database_name }}' and application_name = 'pg_restore')" | grep -e ".f$"
+    volumes:
+      - "{{ storage_directory }}/postgres:/var/lib/postgresql/data"
+      - "{{ storage_directory }}/pg_backups:/pg_backups"
+      - ./restore_dump.sh:/docker-entrypoint-initdb.d/restore_dump.sh
+    env_file:
+      - postgres.env
+    command:
+      - postgres
+      - -c
+{% for argument in postgres_arguments %}
+      - {{ argument }}
+{% endfor %}
+  external_node:
+    image: "matterlabs/external-node:v{{ external_node_version }}"
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.external_node_main.loadbalancer.server.port={{ rpc_http_port }}"
+      - "traefik.http.routers.external_node_main.rule=PathPrefix(`/`)"
+{% if enable_tls %}
+      - "traefik.http.routers.whoami.entrypoints=websecure"
+      - "traefik.http.routers.whoami.tls.certresolver=myresolver"
+      - "traefik.http.routers.whoami.rule=Host(`{{ domain_name }}`)"
+{% else %}
+      - "traefik.http.routers.external_node_main.entrypoints=web"
+{% endif %}
+      - "traefik.http.routers.external_node_main.service=external_node_main"
+
+      - "traefik.http.services.external_node_health.loadbalancer.server.port={{ healthcheck_port }}"
+      - "traefik.http.routers.external_node_health.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.external_node_health.entrypoints=external_node_health"
+      - "traefik.http.routers.external_node_health.service=external_node_health"
+    expose:
+      - {{ rpc_http_port }}
+      - {{ rpc_ws_port }}
+      - {{ healthcheck_port }}
+      - {{ metrics_port }}
+    environment:
+      ZKSYNC_HOME: "/"
+      EN_STATE_CACHE_PATH: /db/state_keeper
+      EN_MERKLE_TREE_PATH: /db/lightweight-new
+      EN_HTTP_PORT: {{ rpc_http_port }}
+      EN_WS_PORT: {{ rpc_ws_port }}
+      EN_HEALTHCHECK_PORT: {{ healthcheck_port }}
+      EN_PROMETHEUS_PORT: {{ metrics_port }}
+      EN_THREADS_PER_SERVER: 64
+      CHAIN_STATE_KEEPER_VALIDATION_COMPUTATIONAL_GAS_LIMIT: 2000000
+      DATABASE_POOL_SIZE: 200
+      EN_MAX_BLOCKS_PER_TREE_BATCH: 200
+      RUST_LOG: zksync_core=debug,zksync_dal=info,zksync_eth_client=info,zksync_merkle_tree=info,zksync_storage=info,zksync_state=debug,zksync_types=info,vm=info,zksync_external_node=info,zksync_utils=debug
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:{{ healthcheck_port }}/health" ]
+      interval: 1m
+      timeout: 30s
+      retries: 60
+      start_period: 1m
+    volumes:
+      - "{{ storage_directory }}/db:/db"
+    env_file:
+      - "external_node.env"
+      - "postgres.env"
