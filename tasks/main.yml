@@ -3,5 +3,9 @@
   ansible.builtin.include_tasks: firewall.yml
   when: use_predefined_iptables
 
+- name: Disable SSH password auth
+  ansible.builtin.include_tasks: ssh-config.yml
+  when: disable_ssh_password_auth
+
 - name: Prepare configs
   ansible.builtin.include_tasks: provision.yml

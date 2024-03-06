@@ -65,16 +65,3 @@
     ip_version: ipv6
     state: saved
     path: /etc/iptables/rules.v6
-
-- name: Disable SSH password authentication
-  when: disable_ssh_password_auth
-  ansible.builtin.lineinfile:
-    path: /etc/ssh/sshd_config
-    regexp: '^#PasswordAuthentication yes'
-    line: 'PasswordAuthentication no'
-
-- name: Restart ssh
-  when: disable_ssh_password_auth
-  ansible.builtin.service:
-    name: ssh
-    state: restarted
