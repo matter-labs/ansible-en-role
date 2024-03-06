@@ -66,7 +66,7 @@ postgres_arguments:
   - -c
 ```
 
-We recommend using [online]<https://pgtune.leopard.in.ua/> or [self-hosted](https://github.com/le0pard/pgtune) version with with "Online transaction processing system" preset as a good starting point for generating optimal config for your hardware.
+We recommend using pgtune [online]<https://pgtune.leopard.in.ua/> or [self-hosted](https://github.com/le0pard/pgtune) version with with "Online transaction processing system" preset as a good starting point for generating optimal config for your hardware.
 
 ## Step-by-step guide
 
