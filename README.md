@@ -30,14 +30,14 @@ If you want to use monitoring (which we highly recommend), you have to change th
 
 ```yaml
 # Monitoring options section
-enable_monitoring: false
-node_name: ""
-prometheus_remote_write: false
-prometheus_remote_write_url: ""
-prometheus_remote_write_auth: false
-prometheus_remote_write_auth_username: ""
-prometheus_remote_write_auth_password: ""
-prometheus_remote_write_common_label: ""
+enable_monitoring: true
+node_name: "some-unique-node-identifier"
+prometheus_remote_write: true
+prometheus_remote_write_url: "https://metrics.example.org"
+prometheus_remote_write_auth: true
+prometheus_remote_write_auth_username: "admin"
+prometheus_remote_write_auth_password: "password"
+prometheus_remote_write_common_label: "matterlabs"
 ```
 
 This role also has option to secure your server and allow traffic only from specified IP address in case if you want
@@ -45,13 +45,13 @@ to use some load balancer in front of your node, while not having fancy cloud se
 
 ```yaml
 # Security options
-use_predefined_iptables: false
-disable_ssh_password_auth: false
+use_predefined_iptables: true
+disable_ssh_password_auth: true
 iptables_packages:
   - iptables
   - iptables-persistent
 # Variable to be used to accept external traffic only from single specified IP
-loadbalancer_ip: ""
+loadbalancer_ip: "1.2.3.4"
 ```
 
 In most of cases, you'd want to change PostgreSQL parameters (we recommend to use <https://pgtune.leopard.in.ua/> with "Online transaction processing system" preset as sane defaults), so you can do it using `postgres_arguments` variable, eg:
