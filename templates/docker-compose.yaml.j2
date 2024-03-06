@@ -16,6 +16,9 @@ services:
       - "--certificatesresolvers.en_resolver.acme.storage=/letsencrypt/acme.json"
       - "--certificatesresolvers.myresolver.acme.email={{ acme_email }}"
 {% endif %}
+      - "--metrics.prometheus=true"
+      - "--metrics.prometheus.entryPoint=metrics"
+      - "--entryPoints.metrics.address=:8080"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
 {% if enable_tls %}

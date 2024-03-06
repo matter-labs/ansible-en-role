@@ -38,3 +38,11 @@ scrape_configs:
       - source_labels: [instance]
         target_label: instance
         replacement: '{{ node_name | mandatory }}'
+  - job_name: traefik
+    static_configs:
+      - targets:
+          - "traefik:8080"
+    relabel_configs:
+      - source_labels: [instance]
+        target_label: instance
+        replacement: '{{ node_name | mandatory }}'

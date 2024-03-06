@@ -57,7 +57,6 @@ postgres_arguments:
   - -c
   - checkpoint_timeout=1800
 
-
 # Enable TLS for traefik
 enable_tls: false
 acme_email: ""
@@ -87,7 +86,7 @@ prometheus_remote_write_url: ""
 prometheus_remote_write_auth: false
 prometheus_remote_write_auth_username: ""
 prometheus_remote_write_auth_password: ""
-prometheus_remote_write_label: ""
+prometheus_remote_write_common_label: ""
 
 # Security options
 use_predefined_iptables: false
