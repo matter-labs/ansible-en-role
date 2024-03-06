@@ -1,12 +1,21 @@
 # ansible-en-role
-Ansible role for setup external node.
+
+Ansible role to deploy and configure zkSync Era External Node, including DB isntance setup on the same machine, Traefik as reverse proxy, and Prometheus monitoring (PostgreSQL exporter, Node exporter, cAdvisor, Traefik, External Node native metrics, and VictoriaMetrics vmagent to scrape all of them).
+
+Make sure to configure Prometheus remote write endpoint to send metrics to centralized metrics storage.
+
+Role has been tested and used internally on bare metal Hetzner instances.
 
 ## Requirements
+
 This role has been tested on:
+
 * Ubuntu 22.04, Jammy Jellyfish; Ansible 2.13.9
 
 ## Usage
+
 This role contains variables which has to be set:
+
 ```yaml
 database_name: ""
 database_username: ""
@@ -17,7 +26,8 @@ l1_chain_id: ""
 l2_chain_id: ""
 ```
 
-If you want to use monitoring, you can use next variables:
+If you want to use monitoring (which we highly recommend), you have to change these variables:
+
 ```yaml
 # Monitoring options section
 enable_monitoring: false
@@ -27,11 +37,11 @@ prometheus_remote_write_url: ""
 prometheus_remote_write_auth: false
 prometheus_remote_write_auth_username: ""
 prometheus_remote_write_auth_password: ""
-prometheus_remote_write_label: ""
+prometheus_remote_write_common_label: ""
 ```
 
-This role also has option to secure your server and allow traffic only from specified ip in case if you want
-to use some load balancer in front of your node:
+This role also has option to secure your server and allow traffic only from specified IP address in case if you want
+to use some load balancer in front of your node, while not having fancy cloud security groups at your disposal:
 
 ```yaml
 # Security options
@@ -40,13 +50,13 @@ disable_ssh_password_auth: false
 iptables_packages:
   - iptables
   - iptables-persistent
-# Variable can be used in case with accept external traffic only from one ip
+# Variable to be used to accept external traffic only from single specified IP
 loadbalancer_ip: ""
 ```
 
-In some cases, you may need to change postgres parameters, so you can do it using `postgres_arguments` variable:
-```yaml
+In most of cases, you'd want to change PostgreSQL parameters (we recommend to use <https://pgtune.leopard.in.ua/> with "Online transaction processing system" preset as sane defaults), so you can do it using `postgres_arguments` variable, eg:
 
+```yaml
 postgres_arguments:
   - log_error_verbosity=terse
   - -c
@@ -54,49 +64,24 @@ postgres_arguments:
   - -c
   - shared_buffers=47616MB
   - -c
-  - effective_cache_size=142848MB
-  - -c
-  - maintenance_work_mem=2GB
-  - -c
-  - checkpoint_completion_target=0.9
-  - -c
-  - wal_buffers=16MB
-  - -c
-  - default_statistics_target=500
-  - -c
-  - random_page_cost=1.1
-  - -c
-  - effective_io_concurrency=200
-  - -c
-  - work_mem=2573kB
-  - -c
-  - huge_pages=try
-  - -c
-  - min_wal_size=4GB
-  - -c
-  - max_wal_size=16GB
-  - -c
-  - max_worker_processes=74
-  - -c
-  - max_parallel_workers_per_gather=37
-  - -c
-  - max_parallel_workers=74
-  - -c
-  - max_parallel_maintenance_workers=4
-  - -c
-  - checkpoint_timeout=1800
 ```
-We recommend to use [pgtune](https://github.com/le0pard/pgtune) to choose optimal config for your hardware. 
+
+We recommend using [online]<https://pgtune.leopard.in.ua/> or [self-hosted](https://github.com/le0pard/pgtune) version with with "Online transaction processing system" preset as a good starting point for generating optimal config for your hardware.
 
 ## Step-by-step guide
 
 1. Install ansible collection on your machine from where you will run ansible:
 `ansible-galaxy collection install community.general`
+
 2. Prepare latest database backup on your host. you can download it from our [public GCS bucket](https://storage.googleapis.com/zksync-era-mainnet-external-node-backups/external_node_latest.pgdump).
-you should place it to `{{ storage_directory }}/pg_backups` directory. By default, `{{ storage_directory }}` is `/usr/src/en` 
-3. **OPTIONAL**: If you already have external-node, you can copy tree directory to new host. Copy external-node database tree to `{{ storage_directory }}/db`. 
-**Keep in mind, tree should be older than postgres database backup.**
+you should place it to `{{ storage_directory }}/pg_backups` directory. By default, `{{ storage_directory }}` is `/usr/src/en`
+
+3. **OPTIONAL**: If you already have external-node, you can copy tree directory to new host. Copy external-node database tree to `{{ storage_directory }}/db`.
+
+**Keep in mind, tree should be older than PostgreSQL database backup.**
+
 4. Run ansible-playbook using this role. We recommend to encrypt next variables with ansible-vault or some another way:
+
 ```
 database_username
 database_password
@@ -104,8 +89,8 @@ eth_l1_url
 vm_auth_username
 vm_auth_password
 ```
-5. Connect to your host, and see status of postgres container. It can take a lot of time before postgres database backup will be restored 
-and postgres server will be ready for use. After postgres goes healty status, external-node runs automatically.
+
+5. Connect to your host, and see status of `postgres` container. It can take a lot of time before PostgreSQL database backup will be restored (hours to days, depending on your disk throughput and IOPS), after which PostgreSQL server will be ready for use. Once `postgres` becomes "healthy", `external_node` runs automatically.
 
 ## Example Playbook
 
@@ -131,9 +116,9 @@ and postgres server will be ready for use. After postgres goes healty status, ex
 
 ## License
 
-Ansible role for external node is distributed under the terms of either
+Ansible role for zkSync Era External Node is distributed under the terms of either
 
-- Apache License, Version 2.0, ([LICENSE-APACHE](LICENSE-APACHE) or <http://www.apache.org/licenses/LICENSE-2.0>)
-- MIT license ([LICENSE-MIT](LICENSE-MIT) or <https://opensource.org/blog/license/mit/>)
+* Apache License, Version 2.0, ([LICENSE-APACHE](LICENSE-APACHE) or <http://www.apache.org/licenses/LICENSE-2.0>)
+* MIT license ([LICENSE-MIT](LICENSE-MIT) or <https://opensource.org/blog/license/mit/>)
 
 at your option.

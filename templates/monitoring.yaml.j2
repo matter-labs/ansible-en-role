@@ -9,7 +9,7 @@ services:
     command:
 {% if prometheus_remote_write %}
       - "--remoteWrite.url={{ prometheus_remote_write_url }}"
-      - "--remoteWrite.label={{ prometheus_remote_write_label }}"
+      - "--remoteWrite.label={{ prometheus_remote_write_common_label }}"
 {% if prometheus_remote_write_auth %}
       - "--remoteWrite.basicAuth.username={{ prometheus_remote_write_auth_username }}"
       - "--remoteWrite.basicAuth.password={{ prometheus_remote_write_auth_password }}"
