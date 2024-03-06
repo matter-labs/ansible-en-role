@@ -14,7 +14,7 @@ This role has been tested on:
 
 ## Usage
 
-This role contains variables which has to be set:
+Minimal required variables that has to be set:
 
 ```yaml
 database_name: ""
