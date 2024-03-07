@@ -64,7 +64,6 @@ domain_name: ""
 
 # Enable basic auth for external node
 enable_basic_auth: false
-basic_auth_username: ""
 basic_auth_secret: ""
 
 # Force restore pg database

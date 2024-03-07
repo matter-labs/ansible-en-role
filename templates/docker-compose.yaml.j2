@@ -71,7 +71,7 @@ services:
       - "traefik.http.routers.external_node_health.service=external_node_health"
 {% if enable_basic_auth %}
       - "traefik.http.routers.external_node_main.middlewares=external_node_auth"
-      - "traefik.http.middlewares.external_node_auth.basicauth.users={{ basic_auth_username }}:{{ basic_auth_secret }}"
+      - "traefik.http.middlewares.external_node_auth.basicauth.users={{ basic_auth_secret }}"
 {% endif %}
     expose:
       - {{ rpc_http_port }}
