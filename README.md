@@ -87,7 +87,7 @@ you should place it to `{{ storage_directory }}/pg_backups` directory. By defaul
 
 3. **OPTIONAL**: If you already have external-node, you can copy tree directory to new host. Copy external-node database tree to `{{ storage_directory }}/db`.
 
-**Keep in mind, tree should be older than PostgreSQL database backup.**
+**Keep in mind, external-node tree should be older than PostgreSQL database backup.**
 
 4. Run ansible-playbook using this role. We recommend encrypting next variables with ansible-vault or some another way:
 
