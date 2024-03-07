@@ -68,7 +68,7 @@ postgres_arguments:
 
 We recommend using pgtune [online]<https://pgtune.leopard.in.ua/> or [self-hosted](https://github.com/le0pard/pgtune) version with with "Online transaction processing system" preset as a good starting point for generating optimal config for your hardware.
 
-If you want to set basic auth for inbound requests, You can do it by configure next variables:
+If you want to set basic auth for inbound requests, You can do it by configuring next variables:
 ```yaml
 # Enable basic auth for external node
 enable_basic_auth: false
