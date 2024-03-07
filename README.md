@@ -54,7 +54,7 @@ iptables_packages:
 loadbalancer_ip: "1.2.3.4"
 ```
 
-In most cases, you'd want to change PostgreSQL parameters (we recommend to use <https://pgtune.leopard.in.ua/> with "Online transaction processing system" preset as valid defaults), so you can do it using `postgres_arguments` variable, eg:
+In most cases, you'd want to change PostgreSQL parameters (we recommend to use <https://pgtune.leopard.in.ua/> with "Online transaction processing system" preset as sane defaults), so you can do it using `postgres_arguments` variable, eg:
 
 ```yaml
 postgres_arguments:
