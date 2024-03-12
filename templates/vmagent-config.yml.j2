@@ -14,14 +14,6 @@ scrape_configs:
       - source_labels: [instance]
         target_label: instance
         replacement: '{{ node_name | mandatory }}'
-  - job_name: node-exporter
-    static_configs:
-      - targets:
-          - "node-exporter:9100"
-    relabel_configs:
-      - source_labels: [instance]
-        target_label: instance
-        replacement: '{{ node_name | mandatory }}'
   - job_name: cadvisor
     static_configs:
       - targets:

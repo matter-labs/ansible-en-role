@@ -21,18 +21,6 @@ services:
       - "--remoteWrite.vmProtoCompressLevel=2"
     restart: always
 
-  node-exporter:
-    image: "prom/node-exporter:v{{ node_exporter_version }}"
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
-    restart: unless-stopped
-    command:
-      - '--path.procfs=/host/proc'
-      - '--path.sysfs=/host/sys'
-      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
-
   cadvisor:
     image: "gcr.io/cadvisor/cadvisor:v{{ cadvisor_version }}"
     volumes:
