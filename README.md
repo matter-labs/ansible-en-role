@@ -1,6 +1,6 @@
 # ansible-en-role
 
-Ansible role to deploy and configure zkSync Era External Node, including DB instance setup on the same machine, Traefik as reverse proxy, and Prometheus monitoring (PostgreSQL exporter, Node exporter, cAdvisor, Traefik, External Node native metrics, and VictoriaMetrics vmagent to scrape all of them).
+Ansible role to deploy and configure zkSync Era External Node, including DB instance setup on the same machine, Traefik as reverse proxy, and Prometheus monitoring (PostgreSQL exporter, cAdvisor, Traefik, External Node native metrics, and VictoriaMetrics vmagent to scrape all of them).
 
 Make sure to configure Prometheus remote write endpoint to send metrics to centralized metrics storage.
 
