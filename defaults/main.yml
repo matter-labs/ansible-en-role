@@ -80,7 +80,7 @@ rpc_http_port: 3060
 rpc_ws_port: 3061
 healthcheck_port: 3081
 metrics_port: 3082
-log_verbosity: info
+rust_log: zksync_external_node=info,zksync_core=info,zksync_core::sync_layer=info,zksync_server=info,zksync_prover=info,zksync_contract_verifier=info,zksync_dal=info,zksync_eth_client=info,zksync_storage=info,zksync_db_manager=info,zksync_merkle_tree=info,zksync_state=info,zksync_utils=info,zksync_types=info,loadnext=info,dev_ticker=info,vm=info,block_sizes_test=info,zksync_verification_key_generator_and_server=info,zksync_object_store=info,setup_key_generator_and_server=info,zksync_circuit_synthesizer=info,zksync_queued_job_processor=info,zksync_health_check=info
 
 # Monitoring options section
 enable_monitoring: false

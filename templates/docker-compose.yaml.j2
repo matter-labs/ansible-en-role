@@ -91,7 +91,7 @@ services:
       DATABASE_POOL_SIZE: 200
       EN_MAX_BLOCKS_PER_TREE_BATCH: 200
       MISC_LOG_FORMAT: json
-      RUST_LOG: zksync_external_node={{ log_verbosity }}
+      RUST_LOG: {{ rust_log }}
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:{{ healthcheck_port }}/health" ]
       interval: 1m
