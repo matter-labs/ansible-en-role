@@ -90,7 +90,8 @@ services:
       CHAIN_STATE_KEEPER_VALIDATION_COMPUTATIONAL_GAS_LIMIT: 2000000
       DATABASE_POOL_SIZE: 200
       EN_MAX_BLOCKS_PER_TREE_BATCH: 200
-      RUST_LOG: zksync_core=debug,zksync_dal=info,zksync_eth_client=info,zksync_merkle_tree=info,zksync_storage=info,zksync_state=debug,zksync_types=info,vm=info,zksync_external_node=info,zksync_utils=debug
+      MISC_LOG_FORMAT: json
+      RUST_LOG: zksync_external_node={{ log_verbosity }}
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:{{ healthcheck_port }}/health" ]
       interval: 1m

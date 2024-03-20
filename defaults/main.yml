@@ -80,6 +80,7 @@ rpc_http_port: 3060
 rpc_ws_port: 3061
 healthcheck_port: 3081
 metrics_port: 3082
+log_verbosity: info
 
 # Monitoring options section
 enable_monitoring: false
