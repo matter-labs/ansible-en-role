@@ -1,0 +1,15 @@
+- hosts: all
+  become: true
+  vars:
+    database_name: "zksync_ext_node_mainnet"
+    database_username: "postgres"
+    database_password: "notsecurepassword"
+    eth_l1_url: "https://ethereum-rpc.publicnode.com"
+    main_node_url: "https://zksync2-mainnet.zksync.io"
+    l1_chain_id: "1"
+    l2_chain_id: "324"
+    enable_snapshots_recovery: true
+    snapshots_bucket_base_url: "zksync-era-mainnet-external-node-snapshots"
+
+  roles:
+    - external_node

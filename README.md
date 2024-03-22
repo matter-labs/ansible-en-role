@@ -14,7 +14,9 @@ This role has been tested on:
 
 ## Usage
 
-Minimal required variables that has to be set:
+For a very simple minimal working example, see example_playbooks directory 
+
+Minimal required variables that have to be set:
 
 ```yaml
 database_name: ""

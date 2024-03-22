@@ -47,7 +47,11 @@ services:
       - {{ argument }}
 {% endfor %}
   external_node:
+{% if not external_node_raw_docker_tag %}
     image: "matterlabs/external-node:v{{ external_node_version }}"
+{% else %}
+    image: "matterlabs/external-node:{{ external_node_raw_docker_tag }}"
+{% endif %}
     restart: unless-stopped
     depends_on:
       postgres:
@@ -103,3 +107,7 @@ services:
     env_file:
       - "external_node.env"
       - "postgres.env"
+{% if enable_snapshots_recovery %}
+    command:
+      - --enable-snapshots-recovery
+{% endif %}
