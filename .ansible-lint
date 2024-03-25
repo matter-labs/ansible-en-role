@@ -2,3 +2,6 @@ skip_list:
   - 'yaml'
   - 'risky-shell-pipe'
   - 'role-name'
+
+exclude_paths:
+  - example_playbooks

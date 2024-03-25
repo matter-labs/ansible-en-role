@@ -2,7 +2,7 @@
 dependencies:
   - src: geerlingguy.docker
     version: "7.1.0"
-    when: docker_install
+    when: docker_install_compose
 
 galaxy_info:
   role_name: external_node

@@ -3,7 +3,7 @@ set -e
 
 {% if force_pg_restore %}
 pg_restore --clean --exit-on-error -j $(nproc --all) -d postgres -U $POSTGRES_USER --no-owner --no-privileges --disable-triggers --create /pg_backups/external_node_latest.pgdump
-{% else %}
+{% elif not enable_snapshots_recovery %}
 if psql -U $POSTGRES_USER -d postgres -lqt | cut -d \| -f 1 | grep -qw "{{ database_name }}"; then
     echo "Database already exists"
 else

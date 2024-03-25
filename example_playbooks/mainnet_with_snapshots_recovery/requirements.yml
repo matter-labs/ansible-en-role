@@ -1,0 +1,12 @@
+---
+roles:
+  - name: geerlingguy.docker
+    src: https://github.com/geerlingguy/ansible-role-docker
+    version: "7.1.0"
+  - name: external_node
+    src: https://github.com/matter-labs/ansible-en-role
+    version: "v3.0.0"
+
+collections:
+  - name: community.general
+    version: 8.4.0
