@@ -26,10 +26,11 @@ Describe what actually happened.
 
 #### 🖥️ Environment
 
-Any relevant environment details like: 
+Any relevant environment details like:
+
 * Ansible version
 * Operating system
-* External node version
+* External Node version
 
 #### 📋 Additional Context
 
