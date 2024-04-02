@@ -14,7 +14,7 @@ This role has been tested on:
 
 ## Usage
 
-For a very simple minimal working example, see example_playbooks directory 
+For a very simple minimal working example, see example_playbooks directory
 
 Minimal required variables that have to be set:
 
@@ -26,6 +26,15 @@ eth_l1_url: ""
 main_node_url: ""
 l1_chain_id: ""
 l2_chain_id: ""
+```
+
+Additional arbitrary environment variables can be passed to External Node container:
+
+```yaml
+additional_env_vars:
+  - { name: "EN_ADDITIONAL_VAR1", value: "Value1" }
+  - { name: "EN_ADDITIONAL_VAR2", value: "Value2" }
+  - { name: "EN_ADDITIONAL_VAR3", value: "Value3" }
 ```
 
 Please refer to [External Node docs](https://github.com/matter-labs/zksync-era/tree/main/docs/guides/external-node/prepared_configs) to find values for different zkSync Era chains.
@@ -75,7 +84,6 @@ We recommend using pgtune [online](https://pgtune.leopard.in.ua/) or [self-hoste
 If you want to use basic auth for inbound requests, you have to change next variables:
 
 ```yaml
-# Enable basic auth for external node
 enable_basic_auth: true
 basic_auth_secret: "htpasswd-generated-secret"
 ```
@@ -104,7 +112,7 @@ Skip this step if you are recovering from a snapshot!
 
 4. Run ansible-playbook using this role. We recommend encrypting next variables with ansible-vault or some another way:
 
-```
+```yaml
 database_username
 database_password
 eth_l1_url
@@ -117,6 +125,7 @@ vm_auth_password
 ## Snapshots Recovery
 
 example config enabling recovery from a snapshot
+
 ```yaml
 - enable_snapshots_recovery: true
 - snapshots_bucket_base_url: "zksync-era-mainnet-external-node-snapshots"

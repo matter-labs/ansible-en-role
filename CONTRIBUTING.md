@@ -5,7 +5,7 @@ sovereignty! We welcome contributions from anyone on the internet, and are grate
 
 ## Ways to contribute
 
-There are many ways to contribute to the external node role:
+There are many ways to contribute to the External Node role:
 
 1. Open issues: if you find a bug, have something you believe needs to be fixed, or have an idea for a feature, please
    open an issue.

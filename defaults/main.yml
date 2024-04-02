@@ -8,7 +8,7 @@ docker_install_compose: true
 docker_version: "25.0.3"
 docker_compose_version: "v2.23.0"
 
-# Versions of external node and 3rd party components
+# Versions of External Node and 3rd party components
 traefik_version: 2.11
 postgres_version: 14
 external_node_version: 21.0.2
@@ -61,7 +61,7 @@ enable_tls: false
 acme_email: ""
 domain_name: ""
 
-# Enable basic auth for external node
+# Enable basic auth for External Node
 enable_basic_auth: false
 basic_auth_secret: ""
 
@@ -72,7 +72,7 @@ force_pg_restore: false
 enable_snapshots_recovery: false
 snapshots_bucket_base_url: ""
 
-# External node and database options
+# External Node and database options
 database_name: ""
 database_username: ""
 database_password: ""
@@ -85,6 +85,9 @@ rpc_ws_port: 3061
 healthcheck_port: 3081
 metrics_port: 3082
 rust_log: zksync_external_node=info,zksync_core=info,zksync_core::sync_layer=info,zksync_server=info,zksync_prover=info,zksync_contract_verifier=info,zksync_dal=info,zksync_eth_client=info,zksync_storage=info,zksync_db_manager=info,zksync_merkle_tree=info,zksync_state=info,zksync_utils=info,zksync_types=info,loadnext=info,dev_ticker=info,vm=info,block_sizes_test=info,zksync_verification_key_generator_and_server=info,zksync_object_store=info,setup_key_generator_and_server=info,zksync_circuit_synthesizer=info,zksync_queued_job_processor=info,zksync_health_check=info
+
+# Additional env vars passed to External Node
+additional_env_vars: []
 
 # Monitoring options section
 enable_monitoring: false

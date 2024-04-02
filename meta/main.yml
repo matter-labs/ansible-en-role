@@ -7,7 +7,7 @@ dependencies:
 galaxy_info:
   role_name: external_node
   author: matter-labs
-  description: External node setup
+  description: External Node setup
   license: "license (MIT, APACHE)"
   min_ansible_version: "2.13.9"
   platforms:
