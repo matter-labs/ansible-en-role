@@ -101,7 +101,6 @@ Skip this step if you are recovering from a snapshot!
 
 * [Era Mainnet latest dump](https://storage.googleapis.com/zksync-era-mainnet-external-node-backups/external_node_latest.pgdump)
 * [Era Sepolia Testnet latest dump](https://storage.googleapis.com/zksync-era-boojnet-external-node-snapshots/external_node_latest.pgdump)
-* [Era Goerli Testnet latest dump](https://storage.googleapis.com/zksync-era-testnet-external-node-backups/external_node_latest.pgdump)
 
 Downloaded dump file should be placed into `{{ storage_directory }}/pg_backups` directory (`/usr/src/en/pg_backups` by default)
 
@@ -124,12 +123,15 @@ vm_auth_password
 
 ## Snapshots Recovery
 
-example config enabling recovery from a snapshot
+Example config enabling recovery from a snapshot:
 
 ```yaml
 - enable_snapshots_recovery: true
-- snapshots_bucket_base_url: "zksync-era-mainnet-external-node-snapshots"
+- snapshots_bucket_base_url: "snapshots-bucket-name"
 ```
+
+* Era Mainnet snapshots bucket name: `zksync-era-mainnet-external-node-snapshots`
+* Era Sepolia Testnet snapshots bucket name: `zksync-era-testnet-sepolia-external-node-backups`
 
 ## Example Playbook
 
