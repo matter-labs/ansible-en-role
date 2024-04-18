@@ -130,8 +130,10 @@ Example config enabling recovery from a snapshot:
 - snapshots_bucket_base_url: "snapshots-bucket-name"
 ```
 
-* Era Mainnet snapshots bucket name: `zksync-era-mainnet-external-node-snapshots`
-* Era Sepolia Testnet snapshots bucket name: `zksync-era-testnet-sepolia-external-node-backups`
+Snapshot buckets:
+
+* Era Mainnet: `zksync-era-mainnet-external-node-snapshots`
+* Era Sepolia Testnet: `zksync-era-boojnet-external-node-snapshots`
 
 ## Example Playbook
 
