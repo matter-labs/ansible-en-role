@@ -79,20 +79,20 @@
 - name: Run docker-compose without monitoring
   when: not enable_monitoring
   ansible.builtin.shell:
-    cmd: nohup docker compose -f docker-compose.yaml up -d &
+    cmd: nohup docker compose -f docker-compose.yaml up -d </dev/null >/dev/null 2>&1 &
     chdir: "{{ configuration_directory }}"
   changed_when: false
 
 - name: Run docker-compose with monitoring
   when: enable_monitoring and (not restore_dump_script.changed)
   ansible.builtin.shell:
-    cmd: nohup docker compose -f monitoring.yaml -f docker-compose.yaml up -d &
+    cmd: nohup docker compose -f monitoring.yaml -f docker-compose.yaml up -d </dev/null >/dev/null 2>&1 &
     chdir: "{{ configuration_directory }}"
   changed_when: false
 
 - name: Run docker-compose with monitoring with recreation
   when: enable_monitoring and restore_dump_script.changed
   ansible.builtin.shell:
-    cmd: nohup docker compose -f monitoring.yaml -f docker-compose.yaml up -d --force-recreate &
+    cmd: nohup docker compose -f monitoring.yaml -f docker-compose.yaml up -d --force-recreate </dev/null >/dev/null 2>&1 &
     chdir: "{{ configuration_directory }}"
   changed_when: false
