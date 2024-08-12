@@ -76,6 +76,20 @@
     - src: "templates/vmagent-config.yml.j2"
       dest: "{{ configuration_directory }}/vmagent-config.yml"
 
+- name: Copy main configs
+  when: enable_consensus
+  ansible.builtin.template:
+    src: "templates/consensus_config.yaml.j2"
+    dest: "{{ configuration_directory }}/consensus_config.yaml"
+    mode: '0644'
+
+- name: Decrypt consensus_secrets
+  when: enable_consensus
+  ansible.builtin.copy:
+    src: "{{ consensus_secrets_file }}"
+    dest: "{{ configuration_directory }}/consensus_secrets.yaml"
+    decrypt: yes
+
 - name: Run docker-compose without monitoring
   when: not enable_monitoring
   ansible.builtin.shell:

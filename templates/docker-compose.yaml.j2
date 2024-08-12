@@ -82,6 +82,9 @@ services:
       - {{ rpc_ws_port }}
       - {{ healthcheck_port }}
       - {{ metrics_port }}
+{% if enable_consensus %}
+      - {{ consensus_port }}
+{% endif %}
     environment:
       ZKSYNC_HOME: "/"
       EN_STATE_CACHE_PATH: /db/state_keeper
@@ -96,6 +99,10 @@ services:
       EN_MAX_BLOCKS_PER_TREE_BATCH: 200
       MISC_LOG_FORMAT: json
       RUST_LOG: {{ rust_log }}
+{% if enable_consensus %}
+      EN_CONSENSUS_CONFIG_PATH: /etc/consensus_config.yaml
+      EN_CONSENSUS_SECRETS_PATH: /run/secrets/consensus_secrets.yaml
+{% endif %}
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:{{ healthcheck_port }}/health" ]
       interval: 1m
@@ -104,10 +111,24 @@ services:
       start_period: 1m
     volumes:
       - "{{ storage_directory }}/db:/db"
+{% if enable_consensus %}
+      - "consensus_config.yaml:/etc/consensus_config.yaml"
+{% endif %}
     env_file:
       - "external_node.env"
       - "postgres.env"
-{% if enable_snapshots_recovery %}
     command:
+{% if enable_snapshots_recovery %}
       - --enable-snapshots-recovery
+{% endif %}
+{% if enable_consensus %}
+      - --enable-consensus
+    secrets:
+      - consensus_secrets
+{% endif %}
+
+{% if enable_consensus %}
+secrets:
+  consensus_secrets:
+    file: consensus_secrets.yaml
 {% endif %}
