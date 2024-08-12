@@ -88,7 +88,7 @@
   ansible.builtin.copy:
     src: "{{ consensus_secrets_file }}"
     dest: "{{ configuration_directory }}/consensus_secrets.yaml"
-    decrypt: yes
+    decrypt: true
     mode: '0600'
 
 - name: Run docker-compose without monitoring
