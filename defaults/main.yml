@@ -11,7 +11,7 @@ docker_compose_version: "v2.23.0"
 # Versions of External Node and 3rd party components
 traefik_version: 2.11
 postgres_version: 14
-external_node_version: 24.6.0
+external_node_version: 24.16.0
 external_node_raw_docker_tag: ""
 vmagent_version: 1.100.1
 cadvisor_version: 0.47.2
@@ -72,6 +72,12 @@ force_pg_restore: false
 # Use a snapshot to recover
 enable_snapshots_recovery: false
 snapshots_bucket_base_url: ""
+
+# https://github.com/matter-labs/zksync-era/blob/main/docs/guides/external-node/09_decentralization.md
+enable_consensus: false
+consensus_secrets_file: ""
+consensus_port: 3054
+consensus_outbound: []
 
 # External Node and database options
 database_name: ""
