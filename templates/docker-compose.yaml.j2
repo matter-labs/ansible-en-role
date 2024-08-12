@@ -101,7 +101,7 @@ services:
       RUST_LOG: {{ rust_log }}
 {% if enable_consensus %}
       EN_CONSENSUS_CONFIG_PATH: /etc/consensus_config.yaml
-      EN_CONSENSUS_SECRETS_PATH: /run/secrets/consensus_secrets.yaml
+      EN_CONSENSUS_SECRETS_PATH: /run/secrets/consensus_secrets
 {% endif %}
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:{{ healthcheck_port }}/health" ]
@@ -112,7 +112,7 @@ services:
     volumes:
       - "{{ storage_directory }}/db:/db"
 {% if enable_consensus %}
-      - "consensus_config.yaml:/etc/consensus_config.yaml"
+      - "{{ configuration_directory }}/consensus_config.yaml:/etc/consensus_config.yaml"
 {% endif %}
     env_file:
       - "external_node.env"
