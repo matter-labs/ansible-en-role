@@ -89,6 +89,7 @@
     src: "{{ consensus_secrets_file }}"
     dest: "{{ configuration_directory }}/consensus_secrets.yaml"
     decrypt: yes
+    mode: '0600'
 
 - name: Run docker-compose without monitoring
   when: not enable_monitoring
