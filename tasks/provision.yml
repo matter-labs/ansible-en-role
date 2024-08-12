@@ -38,7 +38,7 @@
   when: vars[item] == ""
   with_items: "{{ en_required_variables }}"
 
-- name: Copy main configs
+- name: Create main configs
   ansible.builtin.template:
     src: '{{ item.src }}'
     dest: '{{ item.dest }}'
@@ -51,7 +51,7 @@
     - src: "templates/postgres.env.j2"
       dest: "{{ configuration_directory }}/postgres.env"
 
-- name: Copy restore script
+- name: Create restore script
   register: restore_dump_script
   ansible.builtin.template:
     src: 'templates/restore_dump.sh.j2'
@@ -64,7 +64,7 @@
   when: enable_monitoring and ( vars[item] == "" )
   with_items: "{{ monitoring_required_variables }}"
 
-- name: Copy monitoring configs
+- name: Create monitoring configs
   when: enable_monitoring
   ansible.builtin.template:
     src: '{{ item.src }}'
@@ -76,7 +76,7 @@
     - src: "templates/vmagent-config.yml.j2"
       dest: "{{ configuration_directory }}/vmagent-config.yml"
 
-- name: Copy main configs
+- name: Create consensus config
   when: enable_consensus
   ansible.builtin.template:
     src: "templates/consensus_config.yaml.j2"
