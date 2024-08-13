@@ -8,10 +8,13 @@ services:
       - "--log.level=INFO"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.external_node_health.address=:3080"
+      - "--entryPoints.web.address=:80"
+      - "--entryPoints.external_node_health.address=:3080"
+{% if enable_consensus %}
+      - "--entryPoints.external_node_consensus.address=:{{ consensus_port }}"
+{% endif %}
 {% if enable_tls %}
-      - "--entrypoints.websecure.address=:443"
+      - "--entryPoints.websecure.address=:443"
       - "--certificatesresolvers.en_resolver.acme.tlschallenge=true"
       - "--certificatesresolvers.en_resolver.acme.storage=/letsencrypt/acme.json"
       - "--certificatesresolvers.myresolver.acme.email={{ acme_email }}"
@@ -76,6 +79,11 @@ services:
 {% if enable_basic_auth %}
       - "traefik.http.routers.external_node_main.middlewares=external_node_auth"
       - "traefik.http.middlewares.external_node_auth.basicauth.users={{ basic_auth_secret }}"
+{% endif %}
+{% if enable_consensus %}
+      - "traefik.tcp.services.external_node_consensus.loadbalancer.server.port={{ consensus_port }}"
+      - "traefik.tcp.routers.external_node_consensus.entrypoints=external_node_consensus"
+      - "traefik.tcp.routers.external_node_consensus.service=external_node_consensus"
 {% endif %}
     expose:
       - {{ rpc_http_port }}
