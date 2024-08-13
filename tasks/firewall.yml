@@ -49,6 +49,14 @@
     source: "{{ loadbalancer_ip | mandatory }}"
     jump: ACCEPT
 
+- name: Allow consensus port traffic from any IP
+  when: enable_consensus
+  ansible.builtin.iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: "{{ consensus_port }}"
+    jump: ACCEPT
+
 - name: Set default policy to DROP
   ansible.builtin.iptables:
     chain: INPUT
