@@ -82,6 +82,7 @@ services:
 {% endif %}
 {% if enable_consensus %}
       - "traefik.tcp.services.external_node_consensus.loadbalancer.server.port={{ consensus_port }}"
+      - "traefik.tcp.routers.external_node_consensus.rule=HostSNI(`*`)"
       - "traefik.tcp.routers.external_node_consensus.entrypoints=external_node_consensus"
       - "traefik.tcp.routers.external_node_consensus.service=external_node_consensus"
 {% endif %}
