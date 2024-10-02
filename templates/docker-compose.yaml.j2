@@ -127,9 +127,6 @@ services:
       - "external_node.env"
       - "postgres.env"
     command:
-{% if enable_snapshots_recovery %}
-      - --enable-snapshots-recovery
-{% endif %}
 {% if enable_consensus %}
       - --enable-consensus
     secrets:
