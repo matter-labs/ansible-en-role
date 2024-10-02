@@ -108,9 +108,6 @@ services:
       EN_MAX_BLOCKS_PER_TREE_BATCH: 200
       MISC_LOG_FORMAT: json
       RUST_LOG: {{ rust_log }}
-{% if enable_snapshots_recovery %}
-      EN_SNAPSHOTS_RECOVERY_ENABLED: "true"
-{% endif %}
 {% if enable_consensus %}
       EN_CONSENSUS_CONFIG_PATH: /etc/consensus_config.yaml
       EN_CONSENSUS_SECRETS_PATH: /run/secrets/consensus_secrets
