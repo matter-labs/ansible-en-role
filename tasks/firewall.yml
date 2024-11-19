@@ -57,6 +57,15 @@
     destination_port: "{{ consensus_port }}"
     jump: ACCEPT
 
+- name: Allow postgres replication traffic from replica only
+  when: enable_postgres_replication
+  ansible.builtin.iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: 5432
+    source: "{{ postgres_replication_bind_address }}"
+    jump: ACCEPT
+
 - name: Set default policy to DROP
   ansible.builtin.iptables:
     chain: INPUT
