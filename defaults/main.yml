@@ -58,6 +58,7 @@ postgres_arguments:
   - checkpoint_timeout=1800
 enable_postgres_replication: false
 # IP address of the interface replication
+postgres_replications_arguments: []
 postgres_replication_bind_address: ""
 postgres_replica_address: ""
 

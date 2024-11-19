@@ -45,6 +45,7 @@
     - enable_postgres_replication
     - postgres_replication_bind_address
     - postgres_replica_address
+    - postgres_replications_arguments
 
 - name: Check required en vars empty
   ansible.builtin.fail:
