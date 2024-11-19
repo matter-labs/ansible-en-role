@@ -56,6 +56,11 @@ postgres_arguments:
   - max_parallel_maintenance_workers=4
   - -c
   - checkpoint_timeout=1800
+enable_postgres_replication: false
+# IP address of the interface replication
+postgres_replications_arguments: []
+postgres_replication_bind_address: ""
+postgres_replica_address: ""
 
 # Enable TLS for traefik
 enable_tls: false

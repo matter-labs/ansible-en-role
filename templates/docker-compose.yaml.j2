@@ -43,12 +43,23 @@ services:
       - ./restore_dump.sh:/docker-entrypoint-initdb.d/restore_dump.sh
     env_file:
       - postgres.env
+{% if enable_postgres_replication %}
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: "host replication replicator {{ postgres_replica_address }}/32 md5"
+    ports:
+      - "{{ postgres_replication_interface }}:5432:5432"
+{% endif %}
     command:
       - postgres
       - -c
 {% for argument in postgres_arguments %}
       - {{ argument }}
 {% endfor %}
+{% if enable_postgres_replication %}
+{% for repl_argument in postgres_replications_arguments %}
+      - {{ repl_argument }}
+{% endfor %}
+{% endif %}
   external_node:
 {% if not external_node_raw_docker_tag %}
     image: "matterlabs/external-node:v{{ external_node_version }}"

@@ -32,6 +32,21 @@
     - l2_chain_id
     - l1_chain_id
 
+- name: "Verify that required variables for replication is set"
+  when: enable_postgres_replication
+  ansible.builtin.assert:
+    that:
+      - required_var != ""
+    fail_msg: "{{ postgress_replication_required_var }} needs to be set for the role for postgres replication to work"
+    success_msg: "Required variable for postgres replication {{ postgress_replication_required_var }} isn't empty"
+  loop_control:
+    loop_var: postgress_replication_required_var
+  with_items:
+    - enable_postgres_replication
+    - postgres_replication_bind_address
+    - postgres_replica_address
+    - postgres_replications_arguments
+
 - name: Check required en vars empty
   ansible.builtin.fail:
     msg: "Variable '{{ item }}' is empty"
