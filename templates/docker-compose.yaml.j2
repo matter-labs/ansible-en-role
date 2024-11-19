@@ -55,9 +55,11 @@ services:
 {% for argument in postgres_arguments %}
       - {{ argument }}
 {% endfor %}
+{% if enable_postgres_replication %}
 {% for repl_argument in postgres_replications_arguments %}
       - {{ repl_argument }}
 {% endfor %}
+{% endif %}
   external_node:
 {% if not external_node_raw_docker_tag %}
     image: "matterlabs/external-node:v{{ external_node_version }}"
