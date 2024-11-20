@@ -46,6 +46,8 @@
     - postgres_replication_bind_address
     - postgres_replica_address
     - postgres_replications_arguments
+    - postgres_replica_user_name
+    - postgres_replica_user_password
 
 - name: Check required en vars empty
   ansible.builtin.fail:

@@ -1,0 +1,42 @@
+---
+
+- name: Install libpq-dev packages
+  ansible.builtin.apt:
+    update_cache: true
+    name: libpq-dev
+
+- name: Install psycopg2 python package
+  ansible.builtin.pip:
+    name: psycopg2
+
+- name: Grant user replication access for replication.
+  community.postgresql.postgresql_pg_hba:
+    dest: "{{ storage_directory }}/postgres/pg_hba.conf"
+    contype: host
+    users: "{{ postgres_replica_user_name }}"
+    source: "{{ postgres_replica_address }}/32"
+    databases: replication
+    method: "{{ postgres_replica_auth_method }}"
+
+- name: Create postgres replication user
+  community.postgresql.postgresql_user:
+    login_host: "{{ postgres_replication_bind_address }}"
+    login_user: "{{ database_username }}"
+    login_password: "{{ database_password }}"
+    name: "{{ postgres_replica_user_name }}"
+    password: "{{ postgres_replica_user_password }}"
+    role_attr_flags: "REPLICATION"
+
+- name: Create replication slot if doesn't exist
+  community.postgresql.postgresql_slot:
+    login_host: "{{ postgres_replication_bind_address }}"
+    login_user: "{{ database_username }}"
+    login_password: "{{ database_password }}"
+    slot_name: replica
+
+- name: Reload postgres configuration
+  community.postgresql.postgresql_query:
+    login_host: "{{ postgres_replication_bind_address }}"
+    login_user: "{{ database_username }}"
+    login_password: "{{ database_password }}"
+    query: "SELECT pg_reload_conf()"

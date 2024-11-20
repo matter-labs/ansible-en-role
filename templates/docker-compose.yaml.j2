@@ -44,8 +44,6 @@ services:
     env_file:
       - postgres.env
 {% if enable_postgres_replication %}
-    environment:
-      POSTGRES_HOST_AUTH_METHOD: "host replication replicator {{ postgres_replica_address }}/32 md5"
     ports:
       - "{{ postgres_replication_bind_address }}:5432:5432"
 {% endif %}

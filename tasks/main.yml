@@ -9,3 +9,7 @@
 
 - name: Prepare configs
   ansible.builtin.include_tasks: provision.yml
+
+- name: Configure replication on main instance
+  ansible.builtin.include_tasks: replication.yml
+  when: enable_postgres_replication
