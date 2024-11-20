@@ -1,9 +1,9 @@
 ---
-- name: Grant user replication from network 192.168.0.100/24 access for replication with client cert authentication
+- name: Grant user replication access for replication.
   community.postgresql.postgresql_pg_hba:
     dest: {{ storage_directory }}/postgres/pg_hba.conf
     contype: host
-    users: replication
+    users: {{ postgres_replica_user_name }}
     source: {{ postgres_replica_address }}/32
     databases: replication
     method: {{ postgres_replica_auth_method }}
@@ -16,7 +16,6 @@
     name: {{ postgres_replica_user_name }}
     password: {{ postgres_replica_user_password }}
     priv: "REPLICATION"
-
 
 - name: Create replication slot if doesn't exist
   become_user: postgres
