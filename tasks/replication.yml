@@ -15,7 +15,7 @@
     login_password: "{{ database_password }}"
     name: "{{ postgres_replica_user_name }}"
     password: "{{ postgres_replica_user_password }}"
-    priv: "REPLICATION"
+    role_attr_flags: "REPLICATION"
 
 - name: Create replication slot if doesn't exist
   community.postgresql.postgresql_slot:
