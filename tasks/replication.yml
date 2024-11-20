@@ -1,0 +1,34 @@
+---
+- name: Grant user replication from network 192.168.0.100/24 access for replication with client cert authentication
+  community.postgresql.postgresql_pg_hba:
+    dest: {{ storage_directory }}/postgres/pg_hba.conf
+    contype: host
+    users: replication
+    source: {{ postgres_replica_address }}/32
+    databases: replication
+    method: {{ postgres_replica_auth_method }}
+
+- name: Create postgres replication user
+  community.postgresql.postgresql_user:
+    login_host: {{ postgres_replication_bind_address }}
+    login_user: {{ database_username }}
+    login_user: {{ database_username }}
+    name: {{ postgres_replica_user_name }}
+    password: {{ postgres_replica_user_password }}
+    priv: "REPLICATION"
+
+
+- name: Create replication slot if doesn't exist
+  become_user: postgres
+  community.postgresql.postgresql_slot:
+    login_host: {{ postgres_replication_bind_address }}
+    login_user: {{ database_username }}
+    login_user: {{ database_username }}
+    slot_name: replica
+
+- name: Reload postgres select query to acme db
+  community.postgresql.postgresql_query:
+    login_host: {{ postgres_replication_bind_address }}
+    login_user: {{ database_username }}
+    login_user: {{ database_username }}
+    query: "SELECT pg_reload_conf()"

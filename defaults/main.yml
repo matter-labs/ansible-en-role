@@ -59,6 +59,9 @@ postgres_arguments:
 enable_postgres_replication: false
 # IP address of the interface replication
 postgres_replications_arguments: []
+postgres_replica_user_name: ""
+postgres_replica_user_password: ""
+postgres_replica_auth_method: "scram-sha-256"
 postgres_replication_bind_address: ""
 postgres_replica_address: ""
 
