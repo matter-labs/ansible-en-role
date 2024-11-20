@@ -18,7 +18,6 @@
     priv: "REPLICATION"
 
 - name: Create replication slot if doesn't exist
-  become_user: postgres
   community.postgresql.postgresql_slot:
     login_host: "{{ postgres_replication_bind_address }}"
     login_user: "{{ database_username }}"
