@@ -36,7 +36,7 @@
   when: enable_postgres_replication
   ansible.builtin.assert:
     that:
-      - required_var != ""
+      - postgress_replication_required_var != ""
     fail_msg: "{{ postgress_replication_required_var }} needs to be set for the role for postgres replication to work"
     success_msg: "Required variable for postgres replication {{ postgress_replication_required_var }} isn't empty"
   loop_control:
