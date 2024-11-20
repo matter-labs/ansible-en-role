@@ -1,7 +1,6 @@
 ---
-- name: Install psycopg2 packages
-  ansible.builtin.apt:
-    update_cache: true
+- name: Install psycopg2 python package
+  ansible.builtin.pip:
     name: psycopg2
 
 - name: Grant user replication access for replication.
