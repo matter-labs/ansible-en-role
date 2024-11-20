@@ -10,6 +10,6 @@ roles:
 collections:
   - name: community.general
     version: 8.4.0
-# Collection for the replication only.
+  # Collection for the replication only.
   - name: community.postgresql
     version: 3.7.0
