@@ -1,4 +1,10 @@
 ---
+
+- name: Install libpq-dev packages
+  ansible.builtin.apt:
+    update_cache: true
+    name: libpq-dev
+
 - name: Install psycopg2 python package
   ansible.builtin.pip:
     name: psycopg2
