@@ -56,5 +56,5 @@
     login_password: "{{ database_password }}"
     group: pg_read_all_data
     target_roles:
-    - "{{ backup_db_user }}"
+      - "{{ backup_db_user }}"
     state: present
