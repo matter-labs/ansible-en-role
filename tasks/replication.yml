@@ -49,8 +49,11 @@
     name: "{{ backup_db_user }}"
     password: "{{ backup_db_password }}"
 
-- name: Grant role read_only to alice and bob
+- name: Grant role pg_read_all_data to backup user
   community.postgresql.postgresql_membership:
+    login_host: "{{ postgres_replication_bind_address }}"
+    login_user: "{{ database_username }}"
+    login_password: "{{ database_password }}"
     group: pg_read_all_data
     target_roles:
     - "{{ backup_db_user }}"
