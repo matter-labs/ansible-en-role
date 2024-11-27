@@ -41,12 +41,17 @@
     login_password: "{{ database_password }}"
     query: "SELECT pg_reload_conf()"
 
-- name: Create postgres replication user
+- name: Create postgres backup user
   community.postgresql.postgresql_user:
     login_host: "{{ postgres_replication_bind_address }}"
     login_user: "{{ database_username }}"
     login_password: "{{ database_password }}"
     name: "{{ backup_db_user }}"
     password: "{{ backup_db_password }}"
-    db: "{{ backup_db_name }}"
-    priv: "pg_read_all_data"
+
+- name: Grant role read_only to alice and bob
+  community.postgresql.postgresql_membership:
+    group: pg_read_all_data
+    target_roles:
+    - "{{ backup_db_user }}"
+    state: present
