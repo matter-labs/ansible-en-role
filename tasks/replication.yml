@@ -40,3 +40,13 @@
     login_user: "{{ database_username }}"
     login_password: "{{ database_password }}"
     query: "SELECT pg_reload_conf()"
+
+- name: Create postgres replication user
+  community.postgresql.postgresql_user:
+    login_host: "{{ postgres_replication_bind_address }}"
+    login_user: "{{ database_username }}"
+    login_password: "{{ database_password }}"
+    name: "{{ backup_db_user }}"
+    password: "{{ backup_db_password }}"
+    db: "{{ backup_db_name }}"
+    priv: "pg_read_all_data"

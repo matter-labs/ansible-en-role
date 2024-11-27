@@ -64,6 +64,9 @@ postgres_replica_user_password: ""
 postgres_replica_auth_method: "scram-sha-256"
 postgres_replication_bind_address: ""
 postgres_replica_address: ""
+backup_db_user: ""
+backup_db_password: ""
+backup_db_name: ""
 
 # Enable TLS for traefik
 enable_tls: false
