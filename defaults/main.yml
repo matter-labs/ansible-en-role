@@ -88,9 +88,11 @@ snapshots_bucket_base_url: ""
 enable_consensus: false
 consensus_secrets_file: ""
 consensus_port: 3054
-consensus_debug_port_enabled: false
-consensus_debug_port: 5000
 consensus_outbound: []
+consensus_debug_port: 5000
+enable_consensus_debug_port: false
+expose_consensus_debug_port: false
+consensus_debug_port_path_prefix: "/consensus_debug"
 
 # External Node and database options
 database_name: ""
