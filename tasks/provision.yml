@@ -74,6 +74,8 @@
       dest: "{{ configuration_directory }}/external_node.env"
     - src: "templates/postgres.env.j2"
       dest: "{{ configuration_directory }}/postgres.env"
+  loop_control:
+    label: "{{ item.dest }}"
 
 - name: Create restore script
   register: restore_dump_script
@@ -127,5 +129,5 @@
     files: "{{ docker_compose_files }}"
     state: present
     pull: "{{ docker_pull_policy | default('missing') }}"
-    recreate: "{{ 'always' if restore_dump_script.changed else 'smart' }}"
+    recreate: "{{ 'always' if restore_dump_script.changed else 'auto' }}"
     wait: false

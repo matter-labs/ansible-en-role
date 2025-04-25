@@ -80,7 +80,6 @@ services:
       - "traefik.http.routers.external_node_main.entrypoints=web"
 {% endif %}
       - "traefik.http.routers.external_node_main.service=external_node_main"
-
       - "traefik.http.services.external_node_health.loadbalancer.server.port={{ healthcheck_port }}"
       - "traefik.http.routers.external_node_health.rule=PathPrefix(`/`)"
       - "traefik.http.routers.external_node_health.entrypoints=external_node_health"
