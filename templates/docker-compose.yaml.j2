@@ -80,7 +80,6 @@ services:
       - "traefik.http.routers.external_node_main.entrypoints=web"
 {% endif %}
       - "traefik.http.routers.external_node_main.service=external_node_main"
-
       - "traefik.http.services.external_node_health.loadbalancer.server.port={{ healthcheck_port }}"
       - "traefik.http.routers.external_node_health.rule=PathPrefix(`/`)"
       - "traefik.http.routers.external_node_health.entrypoints=external_node_health"
@@ -95,6 +94,20 @@ services:
       - "traefik.tcp.routers.external_node_consensus.entrypoints=external_node_consensus"
       - "traefik.tcp.routers.external_node_consensus.service=external_node_consensus"
 {% endif %}
+{% if enable_consensus and expose_consensus_debug_port %}
+      - "traefik.http.services.external_node_consensus_debug.loadbalancer.server.port={{ consensus_debug_port }}"
+      - "traefik.http.routers.external_node_consensus_debug.rule=PathPrefix(`{{ consensus_debug_port_path_prefix }}`)"
+{% if enable_tls %}
+      - "traefik.http.routers.external_node_consensus_debug.entrypoints=websecure"
+      - "traefik.http.routers.external_node_consensus_debug.tls.certresolver=myresolver"
+{% else %}
+      - "traefik.http.routers.external_node_consensus_debug.entrypoints=web"
+{% endif %}
+      - "traefik.http.routers.external_node_consensus_debug.service=external_node_consensus_debug"
+{% if enable_basic_auth %}
+      - "traefik.http.routers.external_node_consensus_debug.middlewares=external_node_auth"
+{% endif %}
+{% endif %}
     expose:
       - {{ rpc_http_port }}
       - {{ rpc_ws_port }}
@@ -102,6 +115,9 @@ services:
       - {{ metrics_port }}
 {% if enable_consensus %}
       - {{ consensus_port }}
+{% if expose_consensus_debug_port %}
+      - {{ consensus_debug_port }}
+{% endif %}
 {% endif %}
     environment:
       ZKSYNC_HOME: "/"
