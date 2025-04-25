@@ -1,0 +1,9 @@
+---
+- name: Restart external-node service
+  community.docker.docker_compose_v2:
+    project_src: "{{ configuration_directory }}"
+    files: "{{ docker_compose_files }}"
+    state: present
+    services:
+      - external_node
+    restarted: true

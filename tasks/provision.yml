@@ -121,10 +121,11 @@
   ansible.builtin.set_fact:
     docker_compose_files: "{{ ['docker-compose.yaml'] + (['monitoring.yaml'] if enable_monitoring else []) }}"
 
-- name: Run docker compose services
+- name: Run docker compose services (non-blocking)
   community.docker.docker_compose_v2:
     project_src: "{{ configuration_directory }}"
     files: "{{ docker_compose_files }}"
     state: present
     pull: "{{ docker_pull_policy | default('missing') }}"
     recreate: "{{ 'always' if restore_dump_script.changed else 'smart' }}"
+    wait: false
