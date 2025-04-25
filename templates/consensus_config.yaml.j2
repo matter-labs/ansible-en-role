@@ -2,6 +2,9 @@ server_addr: '0.0.0.0:3054'
 public_addr: '{{ ansible_default_ipv4.address }}:{{ consensus_port }}'
 max_payload_size: 5000000
 gossip_dynamic_inbound_limit: 200
+{% if consensus_debug_port_enabled %}
+debug_page_addr: "0.0.0.0:{{ consensus_debug_port }}"
+{% endif %}
 rpc_config:
   get_block_rate:
     burst: 5
